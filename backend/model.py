@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 
-class registration(BaseModel):
+class _registration(BaseModel):
     Full_Name:str
     Username:str
     Email:str
