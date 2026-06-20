@@ -1,15 +1,15 @@
 from fastapi import APIRouter,UploadFile,File,Depends,HTTPException,Form
 from database.schemas import getdb,users_resume
-from model import _registration,login
-from service.service_ra import extract_text_from_pdf,generate_resume_report
+from model import _registration
+from service.service_resume_analysis import extract_text_from_pdf,generate_resume_report
 from service.service_rodmap import generate_roadmap
 from sqlalchemy.orm import session
 from typing import Annotated,Optional
 from database.schemas import getdb
-from security.registration import registation,user_login,check_user
+from security.registration import authentication,check_user
 from fastapi.security import OAuth2PasswordRequestForm
 
-
+auth=authentication()
 dependancy=Annotated[session,Depends(getdb)]
 router=APIRouter()
 
@@ -22,8 +22,6 @@ def home():
     return "Wellcome to AI CAREER MENTOR SYSTEM"
 
 
-# how to guide user to put info in following format?
-# make resume file optional in registration
 
 info_description='''
   Enter information in json format. all fields are compulsory!! \n
@@ -32,7 +30,7 @@ info_description='''
     "Full_Name":"str",
     "Username":"str",
     "Email":"str",
-    "Password":"str",
+    "Password":"str" (#8 charaters),
     "Highest_Class":"str",
     "Career_goal":"str",
     "University":"str",
@@ -40,19 +38,23 @@ info_description='''
     }
 
 '''
+
+
 @router.post("/registration")
 async def user_registration(db:dependancy,info:str=Form(...,description=info_description),file:Annotated[Optional[UploadFile], None] = File(None)): #'...' in File means required
     #we are unable to take two differant types of data in one request so we are taking info as string and convert it to pydantic
     #  model mannually
     #convert mannually info to pydantic model
-    user_info=_registration.model_validate_json(info)
-    return await registation(user_info,db,file)
+    try:
+      user_info=_registration.model_validate_json(info)
+    except Exception as e:
+        raise HTTPException(status_code=422,detail=f"Validation error:{str(e)}")
+    return await auth.registation(user_info,db,file)
 
 @router.post("/login")
 async def login_user(db:dependancy,credential:OAuth2PasswordRequestForm=Depends()):
-        return await user_login(credential,db)
+        return await auth.user_login(credential,db)
     
-
 @router.post("/resume_analyzer")
 async def resume_analyzer(user=Depends(check_user), file: UploadFile = File(...)):
     Career_goal=user.Career_goal

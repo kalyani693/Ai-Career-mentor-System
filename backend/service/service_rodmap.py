@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 from dotenv import load_dotenv
-from service.service_ra import client
+from service.service_resume_analysis import ask_llm
 load_dotenv()
 
 async def generate_roadmap(job_type):
@@ -17,12 +17,8 @@ async def generate_roadmap(job_type):
      job_type={job_type}
 """ 
     try:
-            response=client.models.generate_content(model=model,contents=prompt)
-            data=response.to_json_dict()
-            if data:
-              return {"Roadmap":data.get("candidates")[0].get("content").get("parts")[0]}
-            else:
-                 raise ValueError("Response not generated from gemini")
+         response=ask_llm(prompt)
+         return response
     except Exception as e:
             raise HTTPException(status_code=404, detail=f"{e}") 
             
