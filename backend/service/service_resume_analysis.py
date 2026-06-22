@@ -118,6 +118,8 @@ async def generate_resume_report(extracted_info,job_type):
     2. Strengths and weaknesses of the candidate in relation to the job requirements.\n
     3. Recommendations for improving the resume to better align with the job type.\n
     4. Any potential red flags or concerns that employers might have based on the resume content.\n\n
+    if the extracted information does not matches with the job type then do not create full structured report
+      just answer in a simple way like your resume is not applicable for this role, with the detailed reason of why not matches. 
     Extracted Information:\n{extracted_info}\n\nJob Type:\n{job_type}\n\n
     """
 

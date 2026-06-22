@@ -54,19 +54,36 @@ async def user_registration(db:dependancy,info:str=Form(...,description=info_des
 @router.post("/login")
 async def login_user(db:dependancy,credential:OAuth2PasswordRequestForm=Depends()):
         return await auth.user_login(credential,db)
-    
-@router.post("/resume_analyzer")
-async def resume_analyzer(user=Depends(check_user), file: UploadFile = File(...)):
+
+
+def resume_report(db,user):
+    user_file=db.query(users_resume).filter(users_resume.Username==user.Username).first()
+    if user_file:
+        if user_file.Resume_report:
+            return user_file.Resume_report
+        else:
+            return None
+    else:
+        raise HTTPException(status_code=500,detail="Error in fetching users_file_info")    
+        
+        
+
+@router.post("/resume_analyzer",description="Upload a updated Resume(if not uploaded earlier) For accurate analysis.")
+async def resume_analyzer(db:dependancy,user=Depends(check_user), file: Annotated[Optional[UploadFile],None] = File(None)):
     Career_goal=user.Career_goal
-    extracted_information= await extract_text_from_pdf(file)
-    report=await generate_resume_report(extracted_information.get("Information"),Career_goal)
-    return {"Resume Analysis Report":report.get("Report")}
+    res_report=resume_report(db,user)
+    if not res_report and not file:
+        raise HTTPException(status_code=404,detail="Resume is not Found. Please Upload a updated Resume")
+    if not res_report:
+      extracted_information= await extract_text_from_pdf(file)
+      res_report=await generate_resume_report(extracted_information,Career_goal)
+    return {"Resume Analysis Report":res_report}
 
 
 @router.post("/Roadmap_Generator")
 async def roadmap_generator(user=Depends(check_user), file: UploadFile = File(...)): 
     extracted_information= await extract_text_from_pdf(file)
-    roadmap=await generate_roadmap(extracted_information.get("Information"),user.Career_goal)
-    return {"Roadmap":roadmap.get("Roadmap")}
+    roadmap=await generate_roadmap(extracted_information,user.Career_goal)
+    return {"Roadmap":roadmap}
             
     

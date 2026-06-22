@@ -48,7 +48,7 @@ class authentication():
         
         if file:
           data=model.users_resume(Username=info.Username,File_Name=file.filename,Extension=file.content_type,File_Size=file.size,
-                                  Extracted_text=resume_report if resume_report else resume_data,Uploaded_at=datetime.now(),File_path="--")#resume_data.get("Information")[0].get("text")[0]
+                                  Extracted_text=resume_data,Resume_report=resume_report,Uploaded_at=datetime.now(),File_path="--")#resume_data.get("Information")[0].get("text")[0]
           db.add(data)
     
         db.commit()
