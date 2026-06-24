@@ -9,6 +9,7 @@ from openai import OpenAI
 import os
 from dotenv import load_dotenv
 import json
+from database.schemas import users_resume
 
 #object
 load_dotenv()
@@ -129,3 +130,22 @@ async def generate_resume_report(extracted_info,job_type):
     except Exception as e:
             raise HTTPException(status_code=404, detail=f"Error in generating response:{e}") 
     
+def resume_report(db,user): #get from database
+    user_file=db.query(users_resume).filter(users_resume.Username==user.Username).first()
+    if user_file:
+        if user_file.Resume_report:
+            return user_file.Resume_report
+        else:
+            return None
+    else:
+        raise HTTPException(status_code=500,detail="Error in fetching users_file_info")
+    
+def extracted_res_data(db,user):  # get from database
+    user_file=db.query(users_resume).filter(users_resume.Username==user.Username).first()
+    if user_file:
+        if user_file.Extracted_text:
+            return user_file.Extracted_text
+        else:
+            return None
+    else:
+        raise HTTPException(status_code=500,detail="Error in fetching users_file_info")

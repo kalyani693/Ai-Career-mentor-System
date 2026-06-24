@@ -15,7 +15,7 @@ from datetime import datetime
 load_dotenv()
 password_hash=PasswordHash.recommended()
 dependancy=Annotated[session,Depends(getdb)]
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
 
 
 # add modular coding

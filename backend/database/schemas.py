@@ -21,6 +21,7 @@ class users_resume(base):
     Extension=Column(VARCHAR(50), nullable=False)
     File_Size=Column(Integer, nullable=False)
     Extracted_text=Column(VARCHAR(10000), nullable=False)
+    Resume_report=Column(VARCHAR(10000), nullable=False)
     Uploaded_at=Column(TIMESTAMP, nullable=False, default=datetime.now())
     File_path=Column(VARCHAR(500), nullable=False,unique=True)
 
