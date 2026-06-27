@@ -20,7 +20,7 @@ genai_client=genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
 groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 openrouter_client = OpenAI(
   base_url="https://openrouter.ai/api/v1",
-  api_key=os.getenv("openai_api_key"),
+  api_key=os.getenv("openrouter_api")
 )
 
 def ask_llm(prompt):
@@ -84,24 +84,36 @@ async def extract_text_from_pdf(file):
             if text:
                 extracted_text+=text+"\n"
 
-        information=await extract_info_from_text(extracted_text) 
+        information=await extract_info_from_text(resume_text=extracted_text) 
         info=information.strip()
-        op=[]
+
         if info.startswith("```json") or info.endswith('```'):
-             lines=info.split('\n')
-             op=lines[1:-1]
-       
-    return json.dumps(op)   #["Information"]        
+                lines=info.split('\n')
+                op=lines[1:-1]
+        
+                return json.dumps(op) 
+        return info  #["Information"]        
 
 
-async def extract_info_from_text(resume_text):
+async def extract_info_from_text(resume_text:str):
     
-    prompt=f"""Extract the following information from the resume text:\n\n1. Name\n
-    2. Contact Information (Email, Phone Number)\n3. Summary or Objective\n
-    4. Work Experience (Company Name, Job Title, Duration, Responsibilities)\n
-    5. Education (Degree, Institution, Graduation Year)\n6. Skills\n7. Certifications\n
-    8. Projects\n9. Languages\n10. Any other relevant information\n\nResume Text:\n{resume_text}\n\n
-    Please provide the extracted information in a structured  json format."""
+    prompt=f"""Extract the following information from the  provided resume text. do not ask any follow up questions
+    \n\nResume Text:{resume_text}\n\n
+    response format should be strictly json like 
+    {{
+    "Name":extracted_name,
+    "Contact Information":{{"Email":extracted_email,
+                            "Phone Number":extracted_emailextracted_phone no}},
+    "Summary or Objective" :Summary or Objective ,
+    "Work Experience":{{Company Name, Job Title, Duration, Responsibilities}} ,
+    "Education":{{Degree, Institution, Graduation Year}} ,
+    "skills":[],
+    "Certifications" :[],
+    "Projects":[]  ,
+    "languages":[],
+    "Any other relevant information" :information                
+    }}
+    """
                        
     try:
       response=ask_llm(prompt)

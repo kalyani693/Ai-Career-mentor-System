@@ -1,6 +1,7 @@
 from pydantic import BaseModel,field_validator, model_validator,Field
 from typing import Annotated
 from fastapi import HTTPException
+from enum import Enum
 
 
 class _registration(BaseModel):
@@ -25,4 +26,14 @@ class _registration(BaseModel):
                return Email 
            except Exception as e:
               raise HTTPException(status_code=429,detail=f"Email should be valid/seperated with '@'. error={str(e)}") 
-    
+
+class levels(str,Enum):
+   Easy='Easy'
+   Medium='Medium'
+   Difficult='Difficult'
+
+
+
+
+class level(BaseModel):
+   difficulty_level:levels    

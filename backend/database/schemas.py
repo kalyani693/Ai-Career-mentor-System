@@ -23,7 +23,7 @@ class users_resume(base):
     Extracted_text=Column(VARCHAR(10000), nullable=False)
     Resume_report=Column(VARCHAR(10000), nullable=False)
     Uploaded_at=Column(TIMESTAMP, nullable=False, default=datetime.now())
-    File_path=Column(VARCHAR(500), nullable=False,unique=True)
+    File_path=Column(VARCHAR(500), nullable=False)
 
 def getdb():
     db=sessionlocal() 
