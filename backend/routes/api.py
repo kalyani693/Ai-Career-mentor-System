@@ -1,8 +1,9 @@
 from fastapi import APIRouter,UploadFile,File,Depends,HTTPException,Form
 from database.schemas import getdb,users_resume
-from model import _registration
+from model import _registration,level
 from service.service_resume_analysis import extract_text_from_pdf,generate_resume_report,resume_report,extracted_res_data
 from service.service_rodmap import generate_roadmap
+from service.service_practicequestions import frequently_asked_questions
 from sqlalchemy.orm import session
 from typing import Annotated,Optional
 from database.schemas import getdb
@@ -25,6 +26,7 @@ def home():
 
 info_description='''
   Enter information in json format. all fields are compulsory!! \n
+  highest class is previously completed class ex(B.Tech 2nd year etc)
   example:\n
     {
     "Full_Name":"str",
@@ -38,7 +40,6 @@ info_description='''
     }
 
 '''
-
 
 @router.post("/registration")
 async def user_registration(db:dependancy,info:str=Form(...,description=info_description),file:Annotated[Optional[UploadFile], None] = File(None)): #'...' in File means required
@@ -69,7 +70,7 @@ async def resume_analyzer(db:dependancy,user=Depends(check_user), file: Annotate
     return {"Resume Analysis Report":res_report}
 
 
-@router.post("/Roadmap_Generator")
+@router.post("/Roadmap_Generator",description="Generates detailed Roadmap based on Career Goal")
 async def roadmap_generator(db:dependancy,user=Depends(check_user), file: Annotated[Optional[UploadFile],None] = File(None)):
 
     extracted_data=extracted_res_data(db,user) 
@@ -79,3 +80,10 @@ async def roadmap_generator(db:dependancy,user=Depends(check_user), file: Annota
     return {"Roadmap":roadmap}
             
     
+@router.post("/Practice_questions",description="Provides Top 10 frequently asked questions with personalised answers") 
+async def practiceQuestions(db:dependancy,level:level,user=Depends(check_user)): 
+    top_questions=frequently_asked_questions(level,user,db)
+    return top_questions
+
+
+

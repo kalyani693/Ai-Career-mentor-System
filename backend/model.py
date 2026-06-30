@@ -28,9 +28,9 @@ class _registration(BaseModel):
               raise HTTPException(status_code=429,detail=f"Email should be valid/seperated with '@'. error={str(e)}") 
 
 class levels(str,Enum):
-   Easy='Easy'
-   Medium='Medium'
-   Difficult='Difficult'
+   Easy="Easy"
+   Medium="Medium"
+   Difficult="Difficult"
 
 
 

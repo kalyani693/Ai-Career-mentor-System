@@ -12,14 +12,21 @@ def frequently_asked_questions(level:str,user,db):
     action: Based on difficulty level and career goal generate top 10 most frequently asked questions in interview.
     along with that also provide highly acceptable personalised answers from resume data. if the resume data is not provided
     then generate generalised answers for questions. 
-    format: return the response in structured json format -> {{
-    question1:ans1,
-    question2:ans2.
-    etc...
+    format: return the response in structured list of dictionary format -> 
+    [{{Q1:your question1,
+    A1: your answer for Q1}},
+    {{Q2:your question2,
+    A2: your answer for Q2}},
+    {{Q3:your question3,
+    A3: your answer for Q3}},
+    ..
+    etc
+     ]
+    
     difficulty level={level},career_goal={user.Career_goal},resume_data={resume_data}
 
     Dont hallucinate.
-    }}
+    dont ask any follow up questions.
     """
 
     try:

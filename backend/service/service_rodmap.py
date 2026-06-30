@@ -4,7 +4,7 @@ from service.service_resume_analysis import ask_llm
 load_dotenv()
 
 async def generate_roadmap(resume_data,job_type):
-    prompt=f"""context: using job type and resume_data, create a personalised detailed roadmap, roadmap should start from 
+    prompt=f"""action: using job type and resume_data, create a personalised detailed roadmap, roadmap should start from 
     basic skills to ultimate end goal. also include average time required to complete each step/course of roadmap.
     role: act as a roadmap generator. 
     format: return the response in json format like {{
@@ -13,6 +13,7 @@ async def generate_roadmap(resume_data,job_type):
          'etc...':[]
     }}
     return the response in structured json format without any additional text.
+    dont ask any follow up questions.
     resume_data={resume_data}
      job_type={job_type}
 """ 
