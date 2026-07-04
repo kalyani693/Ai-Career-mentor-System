@@ -9,42 +9,7 @@ body{
     letter-spacing: 0.5px;
 }
 
-.sticky{
-    display:flex;
-    text-align: center;
-    background-color: rgb(249, 249, 249);
-    position: sticky;
-    top:0;
-    padding: 0%;
-    margin: 0%;
-    flex:1;
-        
-}
-.right-menu{
-    margin-left: auto;
-}
-.login{
-    display: inline-block;
-    padding: 10px;
-    margin :2px;
-    background-color: rgb(198, 169, 213);
-    border-radius: 10%; 
-}
-.tabs{
-    display: inline-block;
-    padding: 10px;
-    margin: 2px;
-    background-color: rgb(226, 224, 222);
-    border-radius: 10%;
-    text-align: center;
-}
-.profile{
-    display: inline-block;
-    background-color: grey;
-    padding: 4px;
-    border-radius: 50%;
-    margin: 4px;
-}
+/*navbar*/
 
 .welcome{
     border-radius: 2%;
@@ -170,3 +135,98 @@ button:hover{
     color: white;
     cursor:hand;
 }
+
+/*registration popupoverlay*/
+.overlay{
+    display: none;
+    position: fixed;
+    top:0%;
+    left: 0%;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgb(186, 139, 231,0.5);/*0.5 for transperancy*/
+    backdrop-filter: blur(8px);
+    z-index: 999;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.regcard{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    flex-wrap: wrap;
+    padding: 30px;
+    letter-spacing: 1%;
+    background-color:rgb(150, 84, 211);
+    color: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+}
+.header{
+        display: flex;
+        justify-content: space-between;  
+        align-items:flex-end;
+        margin-bottom: 30px;
+    }
+#Registerbtn{
+    padding: 7px;
+    border-radius: 10px;
+}
+#closebtn{
+    padding: 2px;
+    background-color: red;
+    width: 20px;
+}
+.overlay.show{
+    display: flex;
+}
+
+/*login popupoverlay*/
+.loginpopupCls{
+    display: none;
+    position: fixed;
+    top: 0%;
+    left: 0%;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgb(186, 139, 231,0.5);/*0.5 for transperancy*/
+    backdrop-filter: blur(8px);
+    z-index: 999;
+    justify-content: center;
+    align-items: center;
+    color: white;
+
+    
+}
+
+.loginpopupCls.show{
+    display: flex;
+}
+.logincard{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: rgb(150, 84, 211);
+    gap: 15px;
+    flex-wrap: wrap;
+    padding: 30px;
+    letter-spacing: 1%;
+    color: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+}
+.loginheader{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+#closebutton{
+    background-color: red;
+    padding:2px ;
+    width: 20px;
+}
+#logbtn{
+    padding: 7px;
+    border-radius: 10px;}

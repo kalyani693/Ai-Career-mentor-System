@@ -4,39 +4,89 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI CARRER MENTOR SYSTEM</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../CSS/style.css">
+    <link rel="stylesheet" href="../CSS/navbar.css">
 </head>
 <body>
      
         
     <header>
+        <!--Navbar*/-->
         <div class="sticky"> 
-            <button class="tabs"><h5>Resume Analyzer</h5></button>
-            <button class="tabs"><h5>Roadmap Generator</h5></button>
-            <button class="tabs"><h5>Interview Questions</h5></button>
+            <a href="res_analysis.html"><button class="tabs"><h5>Resume Analyzer</h5></button></a>
+            <a href="road_map.html"><button class="tabs"><h5>Roadmap Generator</h5></button></a>
+            <a href="interview_q.html"><button class="tabs"><h5>Interview Questions</h5></button></a>
             <button class="tabs"><h5>AI Mock Interview</h5></button>
-            <div class="right-menu"><button class="login"><h5> 👨🏻‍💼login</h5></button></div>
-            <button class="login"><h5> Sign In </h5></button>
-            <button class="profile"><h5> 🙎🏻‍♂️</h5></button>
+            <div class="right-menu">
+            <button class="profile"><h5> 🙎🏻‍♂️</h5></button></div>
         </div>
        
     <section class="welcome">
         <h2>Welcome!!</h2>
 
+        <!--Title/-->
         <section class="title"><section class="title_">
             <h1>Ai Career Mentor.</h1>
         </section>
-        <h4>Grow Your Career With Ai-Powered Guidance.</h4></section>
+        <h4>Grow Your Career With Ai-Powered Guidance.</h4>
+        </section>
 
 
-        
+        <!--login and register buttons-->
         <section class="btns">
             <h4><span style="color: antiquewhite;">Register</span> , to go one step close to success.</h4>
-            <button class="btn">
+            <button class="btn" id="regi_btn">
                 Register
             </button>
             <h4>Already have an account?</h4>
-            <button class="btn">Login</button>
+            <button class="btn" id="login_btn"> 👨🏻‍💼Login</button>
+            
+            <!--register button popupoverlay-->
+            <div id="popupoverlay" class="overlay">
+                <div class="regcard">
+                    <span class="header">
+                    <h2 style="color: black;">Create Your Account</h2>
+                    <button id="closebtn">X</button>
+                    </span>
+                    
+                    
+                    <input type="text" placeholder="Full Name">
+                    <input type="text" placeholder="Username (length should be(5 to 8) char)">
+                    
+                    <input type="email" placeholder="Email">
+                    
+                    <input type="text" placeholder="Career Goal">
+                    
+                    <input type="text" placeholder="Uviversity Name">
+                    
+                    <input type="number" placeholder="CGPA">
+                    <input type="password" placeholder="Password">
+                    <h5>(length of password should be 8 char)</h5>
+                    
+                    <h5>Upload your Resume.</h5>
+                    <input type="file" placeholder="Resume">
+                    <br>
+                    <br>
+                    <button id="Registerbtn">Register</button>
+                </div>
+            </div>
+
+            <!--login button popupoverlay-->
+            <div id="loginpopup" class="loginpopupCls">
+               <div class="logincard"> 
+                <span class="loginheader"><h2 style="color: black;">
+                    Login</h2>
+                    <button id="closebutton">x</button>
+                    
+                </span>
+                <input type="text" placeholder="Username">
+                <input type="password" placeholder="Password">
+                <br>
+                <button id="logbtn">Login</button>
+
+                </div>
+            </div>
+
         </section>
     </section>
     </header>
@@ -94,6 +144,8 @@
             <p>Copyright © 2026 AI Career Mentor. All rights reserved.</p>
         </div>
     </footer>
+
+    <script src="../javascript/script.js"></script>
     
 </body>
 </html>
