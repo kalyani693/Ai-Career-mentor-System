@@ -1,6 +1,8 @@
 from fastapi import FastAPI
+import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 from routes.api import router
+from routes.admin_dashboard import router as router2
 
 
 app=FastAPI(title="AI CAREER MENTOR SYSTEM")
@@ -15,4 +17,11 @@ app.add_middleware(
 )
 
 
-app.include_router(router)
+app.include_router(router,tags=["user endpoints"] )#prefix="/router",tags=["endpoints"] direct docs vr diste mindmitra sarkha
+app.include_router(router2,tags=["admin endpoints"] )
+
+
+if __name__== "__main__":
+    uvicorn.run(app,host="0.0.0.0",port=8000)
+
+

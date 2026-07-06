@@ -32,8 +32,40 @@ class levels(str,Enum):
    Medium="Medium"
    Difficult="Difficult"
 
-
-
-
 class level(BaseModel):
-   difficulty_level:levels    
+   difficulty_level:levels
+
+class email(BaseModel):
+    Email:str 
+    @field_validator("Email",mode="after",check_fields=True)
+    @classmethod
+    def validate_email(cls,Email:str):
+        if Email:
+           try: 
+            email_split=Email.split('@')
+            if email_split[1] not in ['gmail.com','yahoo.com','outlook.com','hotmail.com']:
+               raise HTTPException(status_code=429,detail="Please Enter a valid email. example:['gmail.com','yahoo.com','outlook.com','hotmail.com']")
+            else:
+               return Email 
+           except Exception as e:
+              raise HTTPException(status_code=429,detail=f"Email should be valid/seperated with '@'. error={str(e)}")     
+
+class adminregistration(BaseModel):
+    Full_Name:str
+    Username:Annotated[str,Field(min_length=5,max_length=8)]
+    Email:str
+    Password:Annotated[str,Field(min_length=8,max_length=8)]
+    Profession:str
+
+    @field_validator("Email",mode="after",check_fields=True)
+    @classmethod
+    def validate_email(cls,Email:str):
+        if Email:
+           try: 
+            email_split=Email.split('@')
+            if email_split[1] not in ['gmail.com','yahoo.com','outlook.com','hotmail.com']:
+               raise HTTPException(status_code=429,detail="Please Enter a valid email. example:['gmail.com','yahoo.com','outlook.com','hotmail.com']")
+            else:
+               return Email 
+           except Exception as e:
+              raise HTTPException(status_code=429,detail=f"Email should be valid/seperated with '@'. error={str(e)}")            

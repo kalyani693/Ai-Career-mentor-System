@@ -1,5 +1,5 @@
 from fastapi import HTTPException,Depends
-from database.schemas import getdb,registered_users
+from database.schemas import getdb,registered_users,registered_admin
 import database.schemas as model
 from sqlalchemy.orm import session
 from pwdlib import PasswordHash
@@ -16,6 +16,7 @@ load_dotenv()
 password_hash=PasswordHash.recommended()
 dependancy=Annotated[session,Depends(getdb)]
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
+adminoauth2_scheme = OAuth2PasswordBearer(tokenUrl="/adminLogin")
 
 
 # add modular coding
@@ -36,8 +37,10 @@ class authentication():
     hashpassword=password_hash.hash(info.Password)
     try:
         #store user information into database
-        user_data=model.registered_users(Full_Name=info.Full_Name,Username=info.Username,Email=info.Email,hashed_Password=hashpassword,
-                                         Highest_Class=info.Highest_Class,Career_goal=info.Career_goal,University=info.University,CGPA=info.CGPA,Resume_file_path=file.filename if file else None)
+        user_data=model.registered_users(Full_Name=info.Full_Name,Username=info.Username,Email=info.Email,
+                                         hashed_Password=hashpassword,Highest_Class=info.Highest_Class,
+                                         Career_goal=info.Career_goal,University=info.University,CGPA=info.CGPA,is_active=True,
+                                         Resume_file_path=file.filename if file else None)
         db.add(user_data)
 
 
@@ -52,7 +55,7 @@ class authentication():
           db.add(data)
     
         db.commit()
-        return {"Result":f"Congratulations! Registration done.\nData saved successfully!!"}
+        return {"Result":f"Congratulations! User Registration done.\nData saved successfully!!"}
     except Exception as e:
         raise HTTPException(status_code=500,detail={"Error in Data Saving":str(e)})
     
@@ -67,7 +70,7 @@ class authentication():
                               key=secret_key,algorithm=os.getenv('ALGORITHM'))
             return{'access_token':token,"token_type":"bearer"}  # important formating
         else:
-            raise HTTPException(status_code=422,detail="password is wronge")
+            raise HTTPException(status_code=422,detail="password is wrong")
     else:
         raise HTTPException(status_code=400,detail="Account with this Username is not Available")
   except Exception as e:
@@ -92,3 +95,59 @@ async def check_user(db:dependancy, token:str=Depends(oauth2_scheme)):
         raise HTTPException(status_code=401,detail="Invalid Token")
 
 
+class adminAuthentication():
+ def __init__(self):
+    return
+
+
+ async def admin_registation(self,info,db):
+    admin=db.query(registered_admin).filter(registered_admin.Username==info.Username).first()# ya username cha purn data
+    email=db.query(registered_admin).filter(registered_admin.Email==info.Email).first()
+    if admin:
+        raise HTTPException(status_code=400,detail="Account with this Username is Already Present")
+    if email:
+        raise HTTPException(status_code=400,detail="Account with This Email Id Is already Present")
+    hashpassword=password_hash.hash(info.Password)
+    try:
+        #stores admin information into database
+        admin_data=model.registered_admin(Full_Name=info.Full_Name,Username=info.Username,Email=info.Email,
+                                         Profession=info.Profession,hashed_Password=hashpassword,is_active=True)
+        db.add(admin_data)
+        db.commit()
+        return {"Result":f"Congratulations!  Admin Registration done.\nData saved successfully!!"}
+    except Exception as e:
+        raise HTTPException(status_code=500,detail={"Error in Data Saving":str(e)})
+    
+ async def admin_login(self,credential,db):
+    #add->only 3 times retry otherwise stop login for 10 min
+  try:  
+    admin=db.query(registered_admin).filter(registered_admin.Username==credential.username).first()
+    if admin:
+        if password_hash.verify(credential.password,admin.hashed_Password):
+            secret_key=os.getenv('SECRET_KEY')
+            token=jwt.encode(claims={'_username':credential.username,'password':credential.password},
+                              key=secret_key,algorithm=os.getenv('ALGORITHM'))
+            return{'access_token':token,"token_type":"bearer"}  # important formating
+        else:
+            raise HTTPException(status_code=422,detail="password is wrong")
+    else:
+        raise HTTPException(status_code=400,detail="Account with this Username is not Available")
+  except Exception as e:
+      raise HTTPException(status_code=500, detail={"error":str(e)})  
+
+async def check_admin(db:dependancy, token:str=Depends(adminoauth2_scheme)):
+    try:
+        secret_key=os.getenv('SECRET_KEY')
+        algo=os.getenv('ALGORITHM')
+        payload=jwt.decode(token,key=secret_key,algorithms=algo)
+        username=payload.get('_username')
+        password=payload.get('password')
+        user=db.query(registered_admin).filter(registered_admin.Username==username).first()
+        if user and password_hash.verify(password,user.hashed_Password):
+            return user
+        else:
+            raise HTTPException(status_code=401,detail="Invalid Token")
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401,detail="Token Expired")
+    #except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401,detail="Invalid Token")    
