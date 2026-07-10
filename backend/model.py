@@ -69,3 +69,7 @@ class adminregistration(BaseModel):
                return Email 
            except Exception as e:
               raise HTTPException(status_code=429,detail=f"Email should be valid/seperated with '@'. error={str(e)}")            
+           
+class credential(BaseModel):
+   Username:Annotated[str,Field(min_length=5,max_length=8)]
+   Password:Annotated[str,Field(min_length=8,max_length=8)]         

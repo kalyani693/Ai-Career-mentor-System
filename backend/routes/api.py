@@ -1,6 +1,6 @@
 from fastapi import APIRouter,UploadFile,File,Depends,HTTPException,Form,status
 from database.schemas import getdb,users_resume
-from model import _registration,level
+from model import _registration,level,credential
 from service.service_resume_analysis import extract_text_from_pdf,generate_resume_report,resume_report,extracted_res_data
 from service.service_rodmap import generate_roadmap
 from service.service_practicequestions import frequently_asked_questions
@@ -52,11 +52,19 @@ async def user_registration(db:dependancy,info:str=Form(...,description=info_des
         raise HTTPException(status_code=422,detail=f"Validation error:{str(e)}")
     return await auth.registation(user_info,db,file)
 
-@router.post("/login",response_model=dict[str, str],status_code=status.HTTP_200_OK)#post
+@router.post("/login",response_model=dict[str, str],status_code=status.HTTP_200_OK)
 async def login_user(db:dependancy,credential:OAuth2PasswordRequestForm=Depends()):
         return await auth.user_login(credential,db)
 
-      
+@router.delete("/delete_UserAccount")
+async def deleteacc(db:dependancy,user=Depends(check_user)):
+    return await auth.deleteaccount(user,db)
+
+@router.patch("/renew_userAccount")
+async def renewAcc(db:dependancy,info:credential):   
+    return await auth.renewacc(info,db)   
+
+
 
 @router.post("/resume_analyzer",description="Upload a updated Resume(if not uploaded earlier) For accurate analysis."
              ,response_model=dict[str, str | Any | None],status_code=status.HTTP_200_OK)
@@ -87,6 +95,4 @@ async def roadmap_generator(db:dependancy,user=Depends(check_user), file: Annota
 async def practiceQuestions(db:dependancy,level:level,user=Depends(check_user)): 
     top_questions=frequently_asked_questions(level,user,db)
     return {"top_questions":top_questions}
-
-
 
