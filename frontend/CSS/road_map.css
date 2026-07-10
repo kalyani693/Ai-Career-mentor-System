@@ -48,5 +48,6 @@ body{
     height: 10vh;
 }
 #closebtn{
-    width: 20px;
+    width:fit-content;
+    height: fit-content;
 }

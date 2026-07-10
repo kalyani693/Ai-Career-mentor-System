@@ -1,0 +1,117 @@
+*{
+    padding: 0%;
+    margin: 0%;
+}
+body{
+    background-color: rgb(219, 192, 228);
+    padding: 0px;
+    margin: 0px;
+    letter-spacing: 0.5px;
+}
+
+.headContainer{
+    padding: 10px;
+    height: fit-content;
+    /*background-color: rgb(162, 81, 239);*/
+    background:linear-gradient(rgb(222, 208, 227),rgb(182, 78, 234));
+    margin-top: 3vw;
+    margin-left: 3vw;
+    margin-right: 3vw;
+    border-radius: 10px;
+}
+
+.navbar{
+    display: flex;
+    justify-content: space-between;
+}
+.welcome{
+    margin-top: 3vw;
+    margin-left: 1vw;
+    display: flex;
+    justify-content: space-between;
+}
+.greetings{
+    padding: 5vh;
+    font-size:2.5vw;
+    margin-left: 22vw;
+}
+.profileimg{
+    position: relative;
+   width: 7vw;
+   height:7vh;
+   background-color:rgb(110, 22, 192);
+   border-radius: 50%;
+   padding: 7%;
+}
+.popupoverlay{
+    display: none;
+    position: fixed;
+    background-color:rgba(179, 136, 218, 0.5);
+    backdrop-filter: blur(8px);
+    top:0%;
+    left: 0%;
+    width: 100vw;
+    height: 100vh;
+    z-index: 999;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+.card{
+    width: 30%;
+    margin-right:80%;
+    height: 100%;
+    background-color: blueviolet;
+}
+.card #back{
+    display: flex;
+    justify-content: end;
+    padding: 10px;
+}
+.menucard{
+    padding: 10px;
+    line-height: 4vh;
+}
+#menu{
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.popupoverlay.show{
+    display: flex;
+}
+
+
+.maincontainer{
+    /*background-color: rgb(162, 81, 239);*/
+    background-color: rgb(189, 121, 223);
+    max-height: 30%;
+    height: fit-content;
+    margin-top: 3vw;
+    margin-left: 3vw;
+    margin-right: 3vw; 
+    border-radius: 10px;
+    margin-bottom: 5vw;
+}
+
+.details{
+  margin-top: 3vw;
+  margin-left: 3vw;
+  margin-right: 3vw;
+  margin-bottom: 5vw;
+}
+.details h3{
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.info{
+    display: flex;
+ flex-wrap: wrap;
+ flex-direction: column;
+ font-size:large;
+ line-height: 6vh;
+}
+ 

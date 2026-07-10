@@ -176,8 +176,9 @@ button:hover{
 }
 #closebtn{
     padding: 2px;
-    background-color: red;
-    width: 20px;
+    width: fit-content;
+    height:fit-content;
+
 }
 .overlay.show{
     display: flex;
@@ -223,9 +224,10 @@ button:hover{
     margin-bottom: 30px;
 }
 #closebutton{
-    background-color: red;
+    
     padding:2px ;
-    width: 20px;
+    width: fit-content;
+    height:fit-content;
 }
 #logbtn{
     padding: 7px;
