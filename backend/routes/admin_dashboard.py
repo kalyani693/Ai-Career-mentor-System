@@ -8,6 +8,8 @@ from model import email,adminregistration,credential
 from sqlalchemy import text
 
 
+#to accesss all these endpoints go to /admin-pannel/docs server
+
 router=APIRouter()
 dependancy=Annotated[session,Depends(getdb)]
 auth=adminAuthentication()
@@ -17,7 +19,7 @@ async def admin_registration(info:adminregistration,db:dependancy):
     return await auth.admin_registation(info,db)
     
 @router.post("/adminLogin")
-async def admin_login(db:dependancy,info:OAuth2PasswordRequestForm=Depends()):
+async def admin_login_(db:dependancy,info:OAuth2PasswordRequestForm=Depends()):
     return await auth.admin_login(info,db)
 
 @router.delete("/delete_adminAccount")
