@@ -1,8 +1,8 @@
 /*Registration */
-const registration=document.getElementById("regi_btn");
+const regibtn=document.getElementById("regi_btn");
 const popupoverlay=document.getElementById("popupoverlay");
 const close_=document.getElementById("closebtn");
-const register=document.getElementById("Registerbtn");
+const _register=document.getElementById("Registerbtn");
 
 /*Login*/
 const login_btn=document.getElementById("login_btn");
@@ -12,7 +12,7 @@ const login_submit=document.getElementById("logbtn");
 
 
 /*registration*/
-registration.addEventListener('click', ()=>{
+regibtn.addEventListener('click', ()=>{
     popupoverlay.classList.add('show');
 });
 
@@ -20,7 +20,7 @@ close_.addEventListener('click',()=>{
     popupoverlay.classList.remove('show');
 });
 
-register.addEventListener('click',()=>{
+_register.addEventListener('click',()=>{
     /*summmit cha logic*/   
 })
 

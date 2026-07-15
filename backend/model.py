@@ -72,4 +72,27 @@ class adminregistration(BaseModel):
            
 class credential(BaseModel):
    Username:Annotated[str,Field(min_length=5,max_length=8)]
-   Password:Annotated[str,Field(min_length=8,max_length=8)]         
+   Password:Annotated[str,Field(min_length=8,max_length=8)]    
+
+class user_profile(BaseModel):
+    Full_Name:str
+    Username:Annotated[str,Field(min_length=5,max_length=8)]
+    Email:str
+    Highest_Class:str
+    Career_goal:str
+    University:str
+    CGPA:float
+
+class edit(str,Enum):
+   Full_Name="Full_Name"
+   Username="Username"
+   Highest_Class="Highest_Class"
+   Career_goal="Career_goal"
+   University="University"
+   CGPA="CGPA"
+   Resume="Resume"
+   Profile_Pic="Profile_Pic"
+
+class editDetails(BaseModel):
+   what_to_edit:edit 
+    
