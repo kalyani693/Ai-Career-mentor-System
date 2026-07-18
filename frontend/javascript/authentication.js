@@ -1,4 +1,6 @@
 {
+
+  
     /* Registration and Login Logic */
 
 // Registration elements
@@ -117,12 +119,9 @@ async function loginUser() {
     logincard.append(loader);
 
     const _formdata = new FormData();
-    let input = {
-        "username": _username.value,
-        "password": _password.value,
-    };
-
-    _formdata.append("info", JSON.stringify(input));
+    
+    _formdata.append("username", _username.value);
+    _formdata.append("password", _password.value);
 
     try {
         const response = await fetch(_url, {
@@ -133,27 +132,32 @@ async function loginUser() {
         loader.remove();
 
         if (response.ok) {
+
+            //'access_token':token,"token_type":"bearer"
+            localStorage.setItem("access_token",data.access_token);
+            const token_type = data.token_type;
+            // window.location.href = "/index.html";
+
             let result = document.createElement("h3");
             result.classList.add("result-msg");
-            result.style.color = "green";
+            result.style.color = "black";
             result.textContent = "Login Successful!";
             login.after(result);
 
             //profile icon is now clickable
             const profile = document.querySelector('.profile');
             profile.disabled="false"
+            
+            
 
-            // COMMENTED: Normally we would store user session here:
-            // localStorage.setItem('currentUser', JSON.stringify(data));
-            // Instead, we will store the user data in memory for this session
             window.sessionUser = {
                 username: _username.value,
-                fullname: data.Full_Name || "Kalyani",
-                email: data.Email || "kalyani@example.com",
-                highestclass: data.Highest_Class || "B.tech 3rd year",
-                careergoal: data.Career_goal || "Software Engineer",
-                university: data.University || "State University",
-                cgpa: data.CGPA || "9.0",
+                fullname: userinformation.Full_Name || "Kalyani",
+                email: userinformation.Email || "kalyani@example.com",
+                highestclass: userinformation.Highest_Class || "B.tech 3rd year",
+                careergoal: userinformation.Career_goal || "Software Engineer",
+                university: userinformation.University || "State University",
+                cgpa: userinformation.CGPA || "9.0",
                 resume: data.Resume || "resume.pdf"
             };
 
