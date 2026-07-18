@@ -18,7 +18,7 @@
             <a href="interview_q.html"><button class="tabs"><h5>Interview Questions</h5></button></a>
             <button class="tabs"><h5>AI Mock Interview</h5></button>
             <div class="right-menu">
-            <a href="userProfile.html"><button class="profile"><h5> 🙎🏻‍♂️</h5></button></div></a>
+            <a href="userProfile.html"><button class="profile" disabled="true"><h5> 🙎🏻‍♂️</h5></button></div></a>
         </div>
        
     <section class="welcome">
@@ -50,24 +50,26 @@
                     </span>
                     
                     
-                    <input type="text" placeholder="Full Name">
-                    <input type="text" placeholder="Username (length should be(5 to 8) char)">
+                    <input type="text" id="fullname" placeholder="Full Name" required>
+                    <input type="text" id="username" placeholder="Username (length should be(5 to 8) char)" required>
                     
-                    <input type="email" placeholder="Email">
+                    <input type="email" id="email" placeholder="Email" required>
                     
-                    <input type="text" placeholder="Career Goal">
+                    <input type="text" id="careergoal" placeholder="Career Goal" required>
+                    <input type="text" id="highestclass" placeholder="HIghest Class(e.g B.tech 2nd year)" required>
+                    <input type="text" id= "university" placeholder="Uviversity Name" required>
                     
-                    <input type="text" placeholder="Uviversity Name">
-                    
-                    <input type="number" placeholder="CGPA">
-                    <input type="password" placeholder="Password">
+                    <input type="number" id="cgpa" placeholder="CGPA" required>
+                    <input type="password" id="password" placeholder="Password" required>
                     <h5>(length of password should be 8 char)</h5>
                     
                     <h5>Upload your Resume.</h5>
-                    <input type="file" placeholder="Resume">
+                    <input type="file" id="resume" placeholder="Resume">
                     <br>
                     <br>
                     <button id="Registerbtn">Register</button>
+                    <div class="result-msg"></div>
+                    
                 </div>
             </div>
 
@@ -79,10 +81,12 @@
                     <button id="closebutton">>></button>
                     
                 </span>
-                <input type="text" placeholder="Username">
-                <input type="password" placeholder="Password">
+                <input type="text" id="_username" placeholder="Username">
+                <input type="password" id="_password" placeholder="Password">
                 <br>
                 <button id="logbtn">Login</button>
+                <div class="result-msg"></div>
+                
 
                 </div>
             </div>
@@ -143,9 +147,9 @@
             <p> Built using HTML, CSS,JavaScript, FastAPI,PostgreSQL and Gemini AI.</p>
             <p>Copyright © 2026 AI Career Mentor. All rights reserved.</p>
         </div>
-    </footer>
-
-    <script src="../javascript/script.js"></script>
-    
+    </footer>   
 </body>
+    <script src="../javascript/script.js"></script>
+    <script src="../javascript/authentication.js"></script>
+    
 </html>

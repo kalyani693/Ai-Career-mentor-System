@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practice Questions & Answers</title>
+    <link rel="stylesheet" href="../CSS/questions_answers.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Practice Questions & Model Answers</h1>
+        <div id="qa-list">
+            <!-- Questions and answers will be dynamically inserted here -->
+            <p class="loading">Loading questions and answers...</p>
+        </div>
+        <a href="interview_q.html"><button class="back-btn">Back</button></a>
+    </div>
+
+    <script>
+        // Retrieve Q&A from URL parameters
+        const params = new URLSearchParams(window.location.search);
+        const dataStr = params.get("data");
+        const listContainer = document.getElementById("qa-list");
+
+        if (dataStr) {
+            try {
+                // Decode and parse JSON payload
+                const data = JSON.parse(decodeURIComponent(dataStr));
+                listContainer.innerHTML = "";
+
+                let questionsList = [];
+                
+                // Determine format of the returned data
+                if (Array.isArray(data)) {
+                    questionsList = data;
+                } else if (typeof data === "object" && data !== null) {
+                    // Check if questions are wrapped inside a specific key, else extract key-value pairs
+                    if (data.questions && Array.isArray(data.questions)) {
+                        data.questions.forEach((q, idx) => {
+                            let aText = "No answer provided.";
+                            if (data.answers && data.answers[idx]) {
+                                aText = data.answers[idx];
+                            } else if (data.answers && typeof data.answers === "object") {
+                                aText = data.answers[q] || Object.values(data.answers)[idx] || aText;
+                            }
+                            questionsList.push({ question: q, answer: aText });
+                        });
+                    } else {
+                        // General key-value mapping (Question: Answer)
+                        Object.keys(data).forEach(key => {
+                            questionsList.push({ question: key, answer: data[key] });
+                        });
+                    }
+                } else if (typeof data === "string") {
+                    // Format raw text response
+                    const div = document.createElement("div");
+                    div.classList.add("qa-item");
+                    div.innerHTML = `
+                        <div class="answer" style="white-space: pre-line;">${data}</div>
+                    `;
+                    listContainer.appendChild(div);
+                }
+
+                // If lists were compiled successfully, display them
+                if (questionsList.length > 0) {
+                    questionsList.forEach((item, index) => {
+                        const div = document.createElement("div");
+                        div.classList.add("qa-item");
+                        
+                        let qText = typeof item === "string" ? item : (item.question || item.Question || `Question ${index + 1}`);
+                        let aText = item.answer || item.Answer || "Model answer suggestions pending.";
+
+                        div.innerHTML = `
+                            <div class="question">${index + 1}. ${qText}</div>
+                            <div class="answer">${aText}</div>
+                        `;
+                        listContainer.appendChild(div);
+                    });
+                } else if (typeof data !== "string") {
+                    listContainer.innerHTML = "<p>No questions and answers formatted correctly. Response raw display:</p><pre style='background:#f4f4f4; padding:10px; overflow-x:auto;'>" + JSON.stringify(data, null, 2) + "</pre>";
+                }
+            } catch (e) {
+                console.error("Parsing failed:", e);
+                listContainer.innerHTML = `<div class="answer" style="white-space: pre-line;">${decodeURIComponent(dataStr)}</div>`;
+            }
+        } else {
+            listContainer.innerHTML = "<p>No questions and answers found. Please submit difficulty from the Practice Questions page.</p>";
+        }
+    </script>
+</body>
+</html>
