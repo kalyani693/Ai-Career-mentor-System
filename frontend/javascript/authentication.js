@@ -148,21 +148,9 @@ async function loginUser() {
             const profile = document.querySelector('.profile');
             profile.disabled="false"
             
-            
-
-            window.sessionUser = {
-                username: _username.value,
-                fullname: userinformation.Full_Name || "Kalyani",
-                email: userinformation.Email || "kalyani@example.com",
-                highestclass: userinformation.Highest_Class || "B.tech 3rd year",
-                careergoal: userinformation.Career_goal || "Software Engineer",
-                university: userinformation.University || "State University",
-                cgpa: userinformation.CGPA || "9.0",
-                resume: data.Resume || "resume.pdf"
-            };
 
             // Dynamically update UI on the current page to reflect logged-in state
-            updateLoggedInUI(window.sessionUser);
+            //updateLoggedInUI(_username.value);
 
             setTimeout(() => {
                 loginpopupoverlay.classList.remove('show');
@@ -181,25 +169,25 @@ async function loginUser() {
         loader.remove();
         let error_msg = document.createElement("h4");
         error_msg.classList.add("result-msg");
-        error_msg.textContent = "something went wrong";
+        error_msg.textContent = "something went wrong. please try again.";
         error_msg.style.color = "red";
         login.after(error_msg);
     }
 }
 
 // Function to update main page UI upon login
-function updateLoggedInUI(user) {
+function updateLoggedInUI(username) {
     const btnsSection = document.querySelector(".btns");
     if (btnsSection) {
         btnsSection.innerHTML = `
             <div class="user-welcome-card" style="text-align: center; color: white;">
-                <h3>Welcome back, <span style="color: antiquewhite;">${user.fullname}</span>!</h3>
+                <h3>Welcome back, <span style="color: antiquewhite;">${username}</span>!</h3>
                 <p>Ready to level up your career today?</p>
                 <button class="btn" id="logout_btn" style="margin-top: 15px;">Logout</button>
             </div>
         `;
         document.getElementById("logout_btn").addEventListener("click", () => {
-            window.sessionUser = null;
+            localStorage.removeItem("access_token");
             location.reload();
         });
     }

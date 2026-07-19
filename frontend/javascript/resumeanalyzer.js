@@ -3,11 +3,7 @@ const btn = document.getElementById("report_btn");
 let url = "http://127.0.0.1:8000/resume_analyzer";
 
 async function connectbackend() {
-    if (!fileInput.files || !fileInput.files[0]) {
-        alert("Please select a resume file first.");
-        return;
-    }
-
+    
     // Disable button and show loader
     btn.disabled = true;
     btn.textContent = "Analyzing...";
@@ -15,9 +11,14 @@ async function connectbackend() {
     const formdata = new FormData();
     formdata.append("file", fileInput.files[0]);
 
+    const token=localStorage.getItem("access_token");
+    
+
     try {
         let response = await fetch(url, {
             method: 'POST',
+            headers:{"Authorization":`Bearer ${token}`,
+                     "Content-Type":"application/json"},
             body: formdata
         });
         let data = await response.json();
@@ -39,47 +40,58 @@ async function connectbackend() {
 
 function showResponsePopup(data) {
     // Extract properties
-    let score = "N/A";
-    let missingSkills = "None";
-    let improvements = "None";
-    let extraProperties = "";
+    let Summary= "N/A";
+    let ATS_Score= "N/A";
+    let Strengths='None'
+    let Weakness='None'
+    let MissingSkills = "None";
+    let Recommendations = "None";
 
     if (typeof data === "object" && data !== null) {
-        score = data.ATS_Score || data.score || score;
-        
-        let skills = data.Missing_Skills || data.missing_skills;
-        if (Array.isArray(skills)) {
-            missingSkills = skills.join(", ");
-        } else if (skills) {
-            missingSkills = skills;
+        Summary= data.Summary||Summary;
+        ATS_Score = data.ATS_Score ||score;
+
+        let Strength= data.Strengths||Strengths;
+        if (Array.isArray(Strength)) {
+            Strengths = Strength.join(", ");
+        } else if (Strength) {
+            Strengths = Strength;
         }
 
-        improvements = data.Improvements || data.improvements || data.suggestions || data.Suggestions || improvements;
+        let weakness= data.Weakness||Weakness;
+        if (Array.isArray(weakness)) {
+            Weakness = weakness.join(", ");
+        } else if (weakness) {
+            Weakness = weakness;
+        }
 
-        // Collect other properties dynamically
-        Object.keys(data).forEach(key => {
-            const normalizedKey = key.toLowerCase();
-            if (!["ats_score", "score", "missing_skills", "improvements", "suggestions"].includes(normalizedKey)) {
-                let value = data[key];
-                if (typeof value === "object" && value !== null) {
-                    value = JSON.stringify(value);
-                }
-                extraProperties += `<p style="margin-top: 10px;"><strong>${key.replace(/_/g, " ")}:</strong> ${value}</p>`;
-            }
-        });
+
+        
+        let skills = data.Missing_skills || data.missing_skills;
+        if (Array.isArray(skills)) {
+            MissingSkills = skills.join(", ");
+        } else if (skills) {
+            MissingSkills = skills;
+        }
+
+        Recommendations = data.Recommendations || data.recommendations || Recommendations;
+
+        
     } else {
-        improvements = data;
+        Recommendations = data;
     }
 
     // Create popup HTML
     const contentHTML = `
         <h2 style="color: rgb(59, 8, 84); margin-bottom: 20px; font-size: 22px;">Resume Analysis Report</h2>
         <div style="font-size: 15px; color: #333; line-height: 1.6; text-align: left;">
-            <p><strong>ATS Score:</strong> ${score}</p>
-            <p><strong>Missing Skills:</strong> ${missingSkills}</p>
-            <p style="margin-top: 10px;"><strong>Improvements:</strong></p>
-            <p style="background-color: #f9f9f9; padding: 10px; border-left: 4px solid rgb(150, 84, 211); border-radius: 4px; white-space: pre-line; margin-top: 5px;">${improvements}</p>
-            ${extraProperties}
+            <p><strong>Summary:</strong> ${Summary}</p>
+            <p><strong>ATS Score:</strong> ${ATS_Score}</p>
+            <p><strong>Strengths:</strong> ${Strengths}</p>
+            <p><strong>Weakness:</strong> ${Weakness}</p>
+            <p><strong>Missing Skills:</strong> ${MissingSkills}</p>
+            <p style="margin-top: 10px;"><strong>Recommendations:</strong></p>
+            <p style="background-color: #f9f9f9; padding: 10px; border-left: 4px solid rgb(150, 84, 211); border-radius: 4px; white-space: pre-line; margin-top: 5px;">${Recommendations}</p>
         </div>
     `;
 

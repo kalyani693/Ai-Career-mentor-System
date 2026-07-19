@@ -16,30 +16,41 @@ const logoutItem = document.querySelector(".menucard p:nth-child(4)");
 if (logoutItem) {
     logoutItem.style.cursor = "pointer";
     logoutItem.addEventListener("click", () => {
-        // COMMENTED: Normally we would clear user session storage here:
-        // localStorage.removeItem("currentUser");
+        
+        localStorage.removeItem("access_token");
         window.location.href = "index.html";
     });
 }
 
 // Function to load and display user profile details dynamically
-function loadUserProfile() {
-    // Read query parameters from URL (stateless transmission as per user requirement to avoid localStorage)
-    const params = new URLSearchParams(window.location.search);
+const url = "http://127.0.0.1:8000/getUserProfile";
+ async function loadUserProfile() {
+    const token=localStorage.getItem("access_token")
+    
+    try{
+         let response = await fetch(url, {
+            method: 'POST',
+            headers:{"Authorization":`Bearer ${token}`,
+                     "Content-Type":"application/json"},
+            body: formdata
+        });
+        let data = await response.json();
+
+    
     
     // COMMENTED: Normally, we would retrieve user info from storage or perform a session fetch API call:
     // const user = JSON.parse(localStorage.getItem('currentUser'));
     // If not logged in, redirect to login: if (!user) window.location.href = 'index.html';
-    
+    let userinfo=data.user;
     const user = {
-        username: params.get("username") || "kalyani_dev",
-        fullname: params.get("fullname") || "Kalyani Sonawane",
-        email: params.get("email") || "kalyani@example.com",
-        highestclass: params.get("highestclass") || "B.Tech (Computer Science & Engineering)",
-        careergoal: params.get("careergoal") || "Full Stack Developer & AI Engineer",
-        university: params.get("university") || "Savitribai Phule Pune University",
-        cgpa: params.get("cgpa") || "9.2",
-        resumeName: params.get("resume") || "kalyani_resume.pdf"
+        username: userinfo.Username|| "kalyani_dev",
+        fullname: userinfo.Full_Name|| "Kalyani Sonawane",
+        email:userinfo.Email|| "kalyani@example.com",
+        highestclass:userinfo.Highest_Class|| "B.Tech (Computer Science & Engineering)",
+        careergoal:userinfo.Career_goal || "Full Stack Developer & AI Engineer",
+        university: userinfo.University|| "Savitribai Phule Pune University",
+        cgpa:userinfo.get("CGPA")|| "9.2",
+        resumeName:"your_resume.pdf"
     };
 
     // Update greeting heading
@@ -62,6 +73,11 @@ function loadUserProfile() {
             <p><strong>Uploaded Resume:</strong> <a href="#" style="color: #3b0854; text-decoration: underline;">${user.resumeName}</a></p>
         `;
     }
+    }
+    catch{
+       alert("Something went wrong while fetching user information. Please make sure backend is running.");
+    }
+    
 }
 
 // Execute profile load

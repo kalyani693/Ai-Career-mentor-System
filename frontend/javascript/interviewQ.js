@@ -13,9 +13,13 @@ async function connectbackend() {
     const formdata = new FormData();
     formdata.append("difficulty", level);
 
+    const token=localStorage.getItem("access_token");
+
     try {
         let response = await fetch(url, {
             method: 'POST',
+            headers:{"Authorization":`Bearer ${token}`,
+                     "Content-Type":"application/json"},
             body: formdata
         });
         let data = await response.json();
