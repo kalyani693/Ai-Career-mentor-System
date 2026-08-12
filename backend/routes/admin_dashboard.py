@@ -3,7 +3,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from typing import Annotated
 from sqlalchemy.orm import session
 from database.schemas import getdb,registered_users
-from security.registration import check_admin,adminAuthentication
+from service.registration import check_admin,adminAuthentication
 from model import email,adminregistration,credential
 from sqlalchemy import text
 

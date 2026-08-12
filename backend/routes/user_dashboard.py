@@ -1,13 +1,13 @@
 from fastapi import APIRouter,UploadFile,File,Depends,HTTPException,Form,status
 from database.schemas import getdb,users_resume
-from model import _registration,level,credential
-from service.service_resume_analysis import extract_text_from_pdf,generate_resume_report,resume_report,extracted_res_data
-from service.service_rodmap import generate_roadmap
-from service.service_practicequestions import frequently_asked_questions
+from model import _registration,level,credential,user_profile
+from service.resume_analysis import extract_text_from_pdf,generate_resume_report,resume_report,extracted_res_data
+from service.rodmap import generate_roadmap
+from service.practicequestions import frequently_asked_questions
 from sqlalchemy.orm import session
 from typing import Annotated,Optional,Any
 from database.schemas import getdb
-from security.registration import authentication,check_user
+from service.registration import authentication,check_user
 from fastapi.security import OAuth2PasswordRequestForm
 
 auth=authentication()
@@ -95,4 +95,8 @@ async def roadmap_generator(db:dependancy,user=Depends(check_user), file: Annota
 async def practiceQuestions(db:dependancy,level:level,user=Depends(check_user)): 
     top_questions=frequently_asked_questions(level,user,db)
     return {"top_questions":top_questions}
+
+@router.post("mock_interview")
+async def mockinterview():
+    pass
 

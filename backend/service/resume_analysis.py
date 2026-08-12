@@ -70,6 +70,7 @@ def ask_llm(prompt):
 
 
 async def extract_text_from_pdf(file):
+   #for text based pdf's
    try:
     if file.content_type != "application/pdf":
         raise ValueError("Invalid file type. Please upload a PDF file.")
@@ -96,7 +97,32 @@ async def extract_text_from_pdf(file):
                 return json.dumps(op) 
         return info  #["Information"]
    except Exception as e:
-       raise HTTPException(status_code=500,detail=f"Error:{str(e)}")   
+       raise HTTPException(status_code=500,detail=f"Error:{str(e)}") 
+   """try:
+        import easyocr
+        import fitz  # PyMuPDF (pure python installation)
+
+        # 1. Initialize the EasyOCR reader (specifying English 'en')
+        # It will download the model automatically without any system-level installers
+        reader = easyocr.Reader(['en'])
+
+        # 2. Open the PDF file using PyMuPDF
+        doc = fitz.open(file.file)
+
+        for page_num in range(len(doc)):
+            page = doc.load_page(page_num)
+            
+            # Render the page to a pixmap (image pixels)
+            pix = page.get_pixmap()
+            image_bytes = pix.tobytes("png")
+            
+            # 3. Read the text directly from the image bytes
+            result = reader.readtext(image_bytes, detail=0)
+            
+            print(f"--- Page {page_num + 1} Text ---")
+            print(" ".join(result))
+   except Exception as e:
+       raise HTTPException(status_code=500,detail=f"Error in extractiong text from image-based pdf.->{str(e)}")"""           
 
 
 async def extract_info_from_text(resume_text:str):
@@ -130,18 +156,26 @@ async def generate_resume_report(extracted_info,job_type):
     #openai models
 
     prompt=f"""context: I am a student, I am searching for jobs and internships. i want detailed analysis of my resume.
-    role: act as a senior report generator.
+    role: act as a senior report generator. You are expert report generator.
     action: Based on the extracted information from the resume and the job type, generate a comprehensive report that includes:\n\n
-    1. A summary of the candidate's qualifications and suitability for the specified job type.\n
-    2. Strengths and weaknesses of the candidate in relation to the job requirements.\n
-    3. Recommendations for improving the resume to better align with the job type.\n
-    4. Any potential red flags or concerns that employers might have based on the resume content.\n\n
+    response format should same as
+      {{
+        Summary:your answer(string),\n
+        ATS_Score:score(in percentage),\n
+        Strengths:[your answer],\n
+        Weaknesses:[your answer],\n
+        Missing_skills:[your answer],\n
+        Recommendations:your answer
+        }}
+        summary of the candidate's qualifications and suitability for the specified job type. in 1 to 2 sentance.
+       strength and  weaknesses(of the candidate in relation to the job requirements.) \n
+       Recommendations for improving the resume to better align with the job type.\n
+       
 
-    if the resume data matches 40% or above with job type then create detailed report. else
-    do not create full structured report
+    if the resume data matches 40% or above with job type then provide detailed summary. else
       just answer in a simple way like your resume is not applicable for this role, with the detailed reason of why not matches.\n\n 
-
-    response format: return response in string fromat, do not hallucinate and dont ask any follow up questions.  
+    
+    do not hallucinate and dont ask any follow up questions.  
     Extracted Information:{extracted_info}\n Job Type:{job_type}\n\n
     """
 

@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 from dotenv import load_dotenv
-from service.service_resume_analysis import ask_llm,extracted_res_data
+from service.resume_analysis import ask_llm,extracted_res_data
 
 load_dotenv()
 
@@ -11,7 +11,15 @@ def frequently_asked_questions(level:str,user,db):
     role: act as a Experienced recruiter.
     action: Based on difficulty level and career goal generate top 10 most frequently asked questions in interview.
     along with that also provide highly acceptable personalised answers from resume data. if the resume data is not provided
-    then generate generalised answers for questions. 
+    then generate generalised answers for questions.
+    Difficulty Levels:
+    Easy:
+    Focuses on fundamental concepts and basic questions.
+    Medium:
+    Focuses on practical knowledge, application-based questions, and moderate technical depth.
+    Hard:
+    Focuses on complex concepts, problem-solving, system design, and deeper technical understanding. 
+    
     format: return the response in structured list of dictionary format -> 
     [{{Q1:your question1,
     A1: your answer for Q1}},

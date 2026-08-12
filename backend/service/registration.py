@@ -10,7 +10,7 @@ import os
 from dotenv import load_dotenv
 from fastapi.security import OAuth2PasswordBearer
 
-from service.service_resume_analysis import extract_text_from_pdf,generate_resume_report
+from service.resume_analysis import extract_text_from_pdf,generate_resume_report
 from datetime import datetime
 
 load_dotenv()
@@ -66,9 +66,10 @@ class authentication():
     #add->only 3 times retry otherwise stop login for 10 min
   try:  
     user=db.query(registered_users).filter(registered_users.Username==credential.username).first()
-    if user.is_active==False:
-       raise HTTPException( status_code=406,detail=f"Account with this Username has been deleted. status:Not active")
+    
     if user:
+        if user.is_active==False:
+               raise HTTPException( status_code=406,detail=f"Account with this Username has been deleted. status:Not active")
         if password_hash.verify(credential.password,user.hashed_Password):
             secret_key=os.getenv('SECRET_KEY')
             token=jwt.encode(claims={'_username':credential.username,'password':credential.password},
@@ -162,9 +163,10 @@ class adminAuthentication():
     #add->only 3 times retry otherwise stop login for 10 min
   try:  
     admin=db.query(registered_admin).filter(registered_admin.Username==credential.username).first()
-    if admin.is_active==False:
-       raise HTTPException( status_code=406,detail=f"Account with this Username has been deleted. status:Not active")
+    
     if admin:
+        if admin.is_active==False:
+               raise HTTPException( status_code=406,detail=f"Account with this Username has been deleted. status:Not active")
         if password_hash.verify(credential.password,admin.hashed_Password):
             secret_key=os.getenv('SECRET_KEY')
             token=jwt.encode(claims={'_username':credential.username,'password':credential.password},
