@@ -1,8 +1,9 @@
 from fastapi import FastAPI
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
-from routes.api import router
-from routes.admin_dashboard import router as router2
+from routes.user_dashboard import router
+from routes.admin_dashboard import router as adminrouter
+from routes.Userprofile_ import router as Uprofrouter
 
 
 app=FastAPI(title="AI CAREER MENTOR SYSTEM")
@@ -19,8 +20,10 @@ app.add_middleware(
 
 #to seperate admin dashboard and user dashboard I have seperated admin dashboard on admin-pannel server and mount on main app
 app.include_router(router,tags=["user endpoints"] )#prefix="/router",tags=["endpoints"] direct docs vr diste mindmitra sarkha
+app.include_router(Uprofrouter,tags=["user Profile"] )
 
-app_admin.include_router(router2,tags=["admin endpoints"])
+
+app_admin.include_router(adminrouter,tags=["admin endpoints"])
 app.mount("/admin-pannel",app_admin)
 
 
