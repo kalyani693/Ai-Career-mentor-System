@@ -5,12 +5,13 @@ from sqlalchemy.orm import session
 from pwdlib import PasswordHash
 from typing import Annotated
 from jose import jwt
-from sqlalchemy import text
+from sqlalchemy import text,select,update,delete
 import os
 from dotenv import load_dotenv
 from fastapi.security import OAuth2PasswordBearer
 
-from service.resume_analysis import extract_text_from_pdf,generate_resume_report
+from service.resume_analysis import generate_resume_report
+from service.core_services import extract_text_from_pdf
 from datetime import datetime
 
 load_dotenv()
@@ -29,7 +30,7 @@ class authentication():
     return
 
 
- async def registation(self,info,db,file):
+ async def registration(self,info,db,file):
     user=db.query(registered_users).filter(registered_users.Username==info.Username).first()# ya username cha purn data
     email=db.query(registered_users).filter(registered_users.Email==info.Email).first()
     if user:
@@ -82,13 +83,13 @@ class authentication():
   except Exception as e:
       raise HTTPException(status_code=500, detail={"error":str(e)})  
 
- async def deleteaccount(self,user,db):
+ async def logout(self,user,db):
     try: 
         query=text(f"""update registered_users set is_active=False where "Username"='{user.Username}'; """)
         response=db.execute(query)
         db.commit()
         if response._soft_closed==True:
-           return {"response":"Your account is deleted successfully!!"} 
+           return {"response":"LLogged out succesfully!!"} 
         else:
            return {"response":"sorry, something went wrong"}
            
@@ -115,7 +116,18 @@ class authentication():
         raise HTTPException(status_code=400,detail="Account with this Username is not Available")
    except Exception as e:
       raise HTTPException(status_code=500, detail={"error":str(e)}) 
-    
+
+ async def deleteacc(self,user,db):
+    try:
+       stmt=(delete(registered_users).where(registered_users.Username==user.Username))
+       db.execute(stmt)
+       db.commit()
+       return {"response":"Your account is deleted successfully!!"}
+    except Exception as e:
+       raise HTTPException(status_code=500,detail=f"Something went wrong while deleting your account, error:{str(e)}")   
+       
+
+
     
 async def check_user(db:dependancy, token:str=Depends(oauth2_scheme)):
     try:
@@ -179,17 +191,26 @@ class adminAuthentication():
   except Exception as e:
       raise HTTPException(status_code=500, detail={"error":str(e)})
    
- async def deleteaccount(self,admin,db):
+ async def logout(self,admin,db):
     try:
         query=text(f"""update registered_admin set is_active=False where "Username"='{admin.Username}'; """)
         response=db.execute(query)
         db.commit()
         if response._soft_closed==True:
-           return {"response":"Your account is deleted successfully!!"} 
+           return {"response":"admin logged out successfully!!"} 
         else:
            return {"response":"sorry, something went wrong"}
     except Exception as e:
         raise HTTPException(status_code=500,detail=f"error:{str(e)}")  
+
+ async def deleteaccount(self,db,admin):
+    try:
+       stmt=(delete(registered_admin).where(registered_admin.Username==admin.Username))
+       db.execute(stmt)
+       db.commit()
+       return {"response":"your account is deleted succesfully!!"}
+    except Exception as e:
+       raise HTTPException(status_code=500,detail=f"Something went wromg while deleting your Account, Error:{str(e)}")
  
  async def renewacc(self,info,db):
    try:  

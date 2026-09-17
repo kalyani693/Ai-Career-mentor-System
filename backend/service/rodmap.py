@@ -7,25 +7,18 @@ async def generate_roadmap(resume_data,job_type):
     prompt=f"""action: using job type and resume_data, create a personalised detailed roadmap, roadmap should start from 
     basic skills to ultimate end goal. also include average time required to complete each step/course of roadmap.
     role: act as a roadmap generator. 
-    format: return the response in json format like {{
-         'Step1':{{
-               Topic:"",
-               Why this topic is required:"",
-               Prerequisites:"",
-               Recommended learning areas:"",
-               Estimated completion time:""
+    format: return the response in List[json] format like-> 
+         [
+            {{
+               "step":int,
+               "Topic":"",
+               "Why_this_topic_is_required":"",
+               "Prerequisites":"",
+               "Recommended_learning_areas":"",
+               "Estimated_completion_time":""
                }},
 
-         'Step2':{{
-               Topic:"",
-               Why this topic is required:"",
-               Prerequisites:"",
-               Recommended learning areas:"",
-               Estimated completion time:""
-               }},
-          etc....     
-               
-    }}
+          etc....     ]
     return the response in structured json format without any additional text.
     dont ask any follow up questions.
     resume_data={resume_data}

@@ -1,6 +1,7 @@
 from fastapi import HTTPException
 from dotenv import load_dotenv
-from service.resume_analysis import ask_llm,extracted_res_data
+from service.resume_analysis import extracted_res_data
+from service.core_services import ask_llm
 
 load_dotenv()
 
@@ -21,12 +22,12 @@ def frequently_asked_questions(level:str,user,db):
     Focuses on complex concepts, problem-solving, system design, and deeper technical understanding. 
     
     format: return the response in structured list of dictionary format -> 
-    [{{Q1:your question1,
-    A1: your answer for Q1}},
-    {{Q2:your question2,
-    A2: your answer for Q2}},
-    {{Q3:your question3,
-    A3: your answer for Q3}},
+    [{{Q:your question1,
+    A: your answer for Q1}},
+    {{Q:your question2,
+    A: your answer for Q2}},
+    {{Q:your question3,
+    A: your answer for Q3}},
     ..
     etc
      ]

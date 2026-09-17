@@ -24,7 +24,7 @@ async def editprofile(what_to_edit,changed_value,db,user_info):
     except Exception as e:
         raise HTTPException(status_code=500,detail=f"Error in updating user profile. Error:{str(e)}")        
     
-async def updateResume(db,newResume,user):
+async def uploadResume(db,newResume,user):
     pass  
 
 async def updatePic(db,newResume,user):

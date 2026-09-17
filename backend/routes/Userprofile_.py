@@ -6,7 +6,7 @@ from typing import Annotated,Optional,Any
 from database.schemas import getdb
 from service.registration import authentication,check_user
 from pydantic import Field
-from service.Userprofile_ import editprofile,updateResume,updatePic
+from service.Userprofile_ import editprofile,uploadResume,updatePic
 
 auth=authentication()
 dependancy=Annotated[session,Depends(getdb)]
@@ -15,15 +15,15 @@ router=APIRouter()
 
 @router.get("/getUserProfile", response_model=dict[str,user_profile])
 async def userprofile(user=Depends(check_user)):
-    return {"user":user}
+    return {"response":user}
 
 @router.patch("/EditProfile")
 async def edit(db:dependancy,what_to_edit:editDetails,changed_value:str,user=Depends(check_user)):
     return await editprofile(what_to_edit,changed_value,db,user)
 
-@router.put("/EditResume")
-async def editresume(db:dependancy,newResume=File(...),user=Depends(check_user)):
-    return await updateResume(db,newResume,user)
+@router.put("/UploadAnother_Resume")
+async def uploadRes(db:dependancy,newResume=File(...),user=Depends(check_user)):
+    return await uploadResume(db,newResume,user)
 
 @router.put("/EditprofilePic")
 async def editprofile_Pic(db:dependancy,newPicture=File(...),user=Depends(check_user)):
