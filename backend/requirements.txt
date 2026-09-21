@@ -15,7 +15,7 @@ openai
 pandas
 pdfplumber
 pillow
-psycopg2
+psycopg2-binary
 pwdlib
 pyarrow
 pgvector
