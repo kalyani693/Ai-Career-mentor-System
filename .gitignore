@@ -18,3 +18,4 @@ frontend/dist
 logs
 *.log
 walkthrough Ai career mentor sys.md
+backend/__requirements.txt
