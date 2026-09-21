@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 from dotenv import load_dotenv
-from service.resume_analysis import ask_llm
+from service.core_services import ask_llm
 load_dotenv()
 
 async def generate_roadmap(resume_data,job_type):

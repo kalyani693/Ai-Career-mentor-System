@@ -95,4 +95,12 @@ class edit(str,Enum):
 
 class editDetails(BaseModel):
    what_to_edit:edit 
+
+
+#options of confirmation for logout
+class option(str,Enum):
+  Yes="Yes",
+  No="No"
+class confirmation(BaseModel):
+   Confirm_once_again:option   
     

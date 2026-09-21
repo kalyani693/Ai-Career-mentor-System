@@ -1,6 +1,6 @@
 from fastapi import APIRouter,UploadFile,File,Depends,HTTPException,Form,status
 from database.schemas import getdb
-from model import _registration,level,credential
+from model import _registration,level,credential,confirmation
 from service.resume_analysis import generate_resume_report,resume_report,extracted_res_data
 from service.rodmap import generate_roadmap
 from service.core_services import extract_text_from_pdf
@@ -58,12 +58,19 @@ async def login_user(db:dependancy,credential:OAuth2PasswordRequestForm=Depends(
         return await auth.user_login(credential,db)
 
 @router.delete("/Logout", response_model=dict[str, str], status_code=status.HTTP_301_MOVED_PERMANENTLY)#reirected to login page
-async def logout(db:dependancy,user=Depends(check_user)):
-    return await auth.logout(user,db)
+async def logout(db:dependancy,permision:confirmation,user=Depends(check_user)):
+    if permision.Confirm_once_again=="Yes":
+      return await auth.logout(user,db)
+    else:
+        return {"response":"You are logged in 😊 you can explore the application."}
 
 @router.delete("/delete_account",response_model=dict[str, str],status_code=status.HTTP_301_MOVED_PERMANENTLY)#redirected to registration page after  acc deletion
-async def delete_account(db:dependancy,user=Depends(check_user)):
-    return await auth.deleteacc(user,db)
+async def delete_account(db:dependancy,permision:confirmation,user=Depends(check_user)):
+    if permision.Confirm_once_again=="Yes":
+           return await auth.deleteacc(user,db)
+    else:
+        return {"response":"Your account is active 😊 you can explore the application."}
+   
 
 @router.patch("/renew_userAccount",response_model=dict[str, str], status_code=status.HTTP_301_MOVED_PERMANENTLY)#redirect to login page
 async def renewAcc(db:dependancy,info:credential):   
@@ -108,7 +115,7 @@ async def practiceQuestions(db:dependancy,level:level,user=Depends(check_user)):
 async def mockinterview():
     pass
 
-@router.Post("/Chat_with_AI",description="Chat with AI mentor for any career related queries",response_model=dict[str, str | None],status_code=status.HTTP_200_OK)
+@router.post("/Chat_with_AI",description="Chat with AI mentor for any career related queries",response_model=dict[str, str | None],status_code=status.HTTP_200_OK)
 async def chat_with_ai():
     pass
 

@@ -1,5 +1,6 @@
-from sqlalchemy import text
+from sqlalchemy import text,select
 from fastapi import HTTPException
+from database.schemas import registered_users
 
 
 async def editprofile(what_to_edit,changed_value,db,user_info):
@@ -15,12 +16,10 @@ async def editprofile(what_to_edit,changed_value,db,user_info):
             query=text(f"""update registered_users set {what_to_edit}={changed_value} where "Email"=='{user_info.Email}'""")
             response=db.execute(query)
             if response._soft_closed==True:
-                return {"response":f"{what_to_edit} is upadated Successfully!!"}
+              return {"response":f"{what_to_edit} is upadated Successfully!!"}
             else:
-                return {"response":"sorry, something went wrong"}
-            
-        db.commmit() 
-                      
+              return {"response":"sorry, something went wrong"}
+                           
     except Exception as e:
         raise HTTPException(status_code=500,detail=f"Error in updating user profile. Error:{str(e)}")        
     
