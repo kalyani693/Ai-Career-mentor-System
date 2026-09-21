@@ -10,4 +10,11 @@ chatbotData
 sampledata
 frontend/javascript/demo.html
 frontend/javascript/fetchapi.js
-frontend/HTML/photo Kalyani .pdf
+simple_frontend/HTML/photo Kalyani .pdf
+simple_frontend
+frontend/node_modules
+frontend/dist
+.env.local
+logs
+*.log
+walkthrough Ai career mentor sys.md
