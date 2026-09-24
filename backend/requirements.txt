@@ -37,4 +37,4 @@ websocket-client
 websockets
 pytesseract
 uuid-utils
-mangum
+python-multipart
