@@ -1,8 +1,10 @@
 pwdlib[argon2]
 cryptography
+colorama
 fastapi
 gitdb
 GitPython
+google-auth
 google-genai
 groq
 httpx
@@ -13,6 +15,7 @@ jwt
 numpy
 oauthlib
 openai
+packaging
 pandas
 pdfplumber
 pillow
@@ -21,6 +24,8 @@ pwdlib
 pyarrow
 pgvector
 pydantic
+pydantic-settings
+pydantic_core
 pypdf
 python-dotenv
 python-jose
@@ -37,4 +42,5 @@ websocket-client
 websockets
 pytesseract
 uuid-utils
+mangum
 python-multipart
