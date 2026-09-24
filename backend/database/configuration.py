@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-url=os.getenv("postgresql_url")  
+url=os.getenv("postgresql_url_POSTGRES_URL") #   postgresql_url
 engine=create_engine(url)
 sessionlocal=sessionmaker(autoflush=False,bind=engine,autocommit=False)
 base=declarative_base()
