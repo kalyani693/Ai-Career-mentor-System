@@ -13,7 +13,7 @@ app_admin=FastAPI(title="Admin Dashboard")
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://aicareermentorfrontend.vercel.app"],  
+    allow_origins=["https://aicareermentorfrontend.vercel.app","http://localhost:5173"],  
     allow_credentials=True,
     allow_methods=["*"],  
     allow_headers=["*"],  
