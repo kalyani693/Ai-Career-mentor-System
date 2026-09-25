@@ -7,6 +7,13 @@ load_dotenv()
 
 
 url=os.getenv("postgresql_url_POSTGRES_URL") #   postgresql_url
+
+if url:
+    if url.startswith("postgres://"):
+        url=url.replace("postgres://","postgresql+psycopg2://",1)
+    elif url.startswith("postgresql://"):
+        url=url.replace("postgresql://","postgresql+psycopg2://",1)    
+
 engine=create_engine(url)
 sessionlocal=sessionmaker(autoflush=False,bind=engine,autocommit=False)
 base=declarative_base()
