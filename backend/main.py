@@ -4,12 +4,17 @@ from fastapi.middleware.cors import CORSMiddleware
 from routes.user_dashboard import router
 from routes.admin_dashboard import router as adminrouter
 from routes.Userprofile_ import router as Uprofrouter
+
+from database.configuration import base,engine
+import database.schemas
 from mangum import Mangum
 
 
 
 app=FastAPI(title="AI CAREER MENTOR SYSTEM")
 app_admin=FastAPI(title="Admin Dashboard")
+
+base.metadata.create_all(bind=engine)
 
 # Configure CORS
 app.add_middleware(

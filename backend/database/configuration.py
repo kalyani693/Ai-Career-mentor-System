@@ -1,6 +1,6 @@
 
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker,declarative_base,DeclarativeBase
+from sqlalchemy.orm import sessionmaker,declarative_base
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -18,7 +18,3 @@ engine=create_engine(url)
 sessionlocal=sessionmaker(autoflush=False,bind=engine,autocommit=False)
 base=declarative_base()
 
-#class Base(DeclarativeBase):
-#    pass
-
-#base.metadata.create_all(engine)
