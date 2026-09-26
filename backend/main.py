@@ -7,6 +7,7 @@ from routes.Userprofile_ import router as Uprofrouter
 from mangum import Mangum
 
 
+
 app=FastAPI(title="AI CAREER MENTOR SYSTEM")
 app_admin=FastAPI(title="Admin Dashboard")
 
@@ -18,6 +19,24 @@ app.add_middleware(
     allow_methods=["*"],  
     allow_headers=["*"],  
 )
+
+#for now
+from sqlalchemy import text
+from database.configuration import engine
+
+@app.get("/debug-db")
+def debug_db():
+    with engine.connect() as connection:
+        result=connection.execute(text("""
+         SELECT current_database(), current_schema(), current_user, to_regclass('public.registered_users')""")).fetchone()
+
+        return{
+            "database":result[0],
+            "schema":result[1],
+            "user":result[2],
+            "registered_users":str(result[3]) if result[3] else None
+        }
+    
 
 #to seperate admin dashboard and user dashboard I have seperated admin dashboard on admin-pannel server and mount on main app
 app.include_router(router,tags=["user endpoints"] )#prefix="/router",tags=["endpoints"] direct docs vr diste mindmitra sarkha
