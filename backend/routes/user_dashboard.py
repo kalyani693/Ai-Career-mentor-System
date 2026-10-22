@@ -1,10 +1,9 @@
-from fastapi import APIRouter,UploadFile,File,Depends,HTTPException,Form,status,WebSocket,WebSocketDisconnect
+from fastapi import APIRouter,UploadFile,File,Depends,HTTPException,Form,status
 from database.schemas import getdb
 from model import _registration,level,credential,confirmation
 from service.resume_analysis import generate_resume_report,resume_report,extracted_res_data
 from service.rodmap import generate_roadmap
 from service.core_services import extract_text_from_pdf
-#from service.mock_interview import chat_service
 from service.practicequestions import frequently_asked_questions
 from sqlalchemy.orm import session
 from typing import Annotated,Optional,Any
@@ -112,35 +111,7 @@ async def practiceQuestions(db:dependancy,level:level,user=Depends(check_user)):
     top_questions=frequently_asked_questions(level,user,db)
     return {"response":top_questions}
 
-"""@router.websocket("/ws")
-async def websocket_mockInterview(websocket:WebSocket):
-    #connection estabilished
-    await websocket.accept()
 
-    #chat_history
-    chat_history=[('system','you are helpful chat assistant.You are also intelligent and experienced Interviwer')] 
-
-    try:
-      while True:   
-        #accept text send by the client
-        user_query= await websocket.receive_text()
-
-        #add query in chat history
-        chat_history.append(('user',user_query))
-
-        #llm call
-        response=chat_service(chat_history)
-
-        if response:
-           print("llm called, resp=",response)
-
-        await websocket.send_text(response)
-
-        #add reponse in history
-        chat_history.append(('assistant',response))
-
-    except WebSocketDisconnect:
-       print("connection closed by the client.")"""
 
 @router.post("/Chat_with_AI",description="Chat with AI mentor for any career related queries",response_model=dict[str, str | None],status_code=status.HTTP_200_OK)
 async def chat_with_ai():
