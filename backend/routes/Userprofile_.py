@@ -18,8 +18,8 @@ async def userprofile(user=Depends(check_user)):
     return {"response":user}
 
 @router.patch("/EditProfile")
-async def edit(db:dependancy,what_to_edit:editDetails,changed_value:str,user=Depends(check_user)):
-    return await editprofile(what_to_edit,changed_value,db,user)
+async def edit(db:dependancy,payload:editDetails,user=Depends(check_user)):
+    return await editprofile(payload.what_to_edit,payload.changed_value,db,user)
 
 @router.put("/UploadAnother_Resume")
 async def uploadRes(db:dependancy,newResume=File(...),user=Depends(check_user)):

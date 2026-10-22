@@ -90,11 +90,10 @@ class edit(str,Enum):
    Career_goal="Career_goal"
    University="University"
    CGPA="CGPA"
-   Resume="Resume"
-   Profile_Pic="Profile_Pic"
 
 class editDetails(BaseModel):
    what_to_edit:edit 
+   changed_value:str
 
 
 #options of confirmation for logout
