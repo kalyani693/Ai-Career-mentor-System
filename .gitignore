@@ -7,6 +7,9 @@ sample.py
 .venv
 __pycache__
 chatbotData
+Mock_Interview_chatbot
+backend.zip
+RAG
 sampledata
 frontend/javascript/demo.html
 frontend/javascript/fetchapi.js
