@@ -27,7 +27,7 @@ openrouter_client = OpenAI(
 
 def ask_llm(prompt):
      try:
-            response=genai_client.models.generate_content(model="gemini-3.5-flash",contents=prompt)
+            response=genai_client.models.generate_content(model="gemini-3.6-flash",contents=prompt)
 
             response_text=response.text
             if response_text:
@@ -44,7 +44,7 @@ def ask_llm(prompt):
                 "role": "user",
                  "content":prompt
               }],
-                 model="llama-3.3-70b-versatile")
+                 model="openai/gpt-oss-120b")
               
               if response_:
                  return response_.choices[0].message.content
