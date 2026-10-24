@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { editProfile, editResume, editProfilePic } from '../api/profile';
 import { deleteUserAccount } from '../api/auth';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { User, Edit, Upload, Trash2, Check, Sparkles, FileText, AlertTriangle } from 'lucide-react';
 import Card from '../components/Card';
 import Button from '../components/Button';
@@ -10,6 +11,7 @@ import Badge from '../components/Badge';
 
 const UserProfilePage = () => {
   const { user, refreshProfile, logout } = useAuth();
+  const navigate = useNavigate();
 
   const [editingField, setEditingField] = useState(null);
   const [fieldValue, setFieldValue] = useState('');
@@ -99,10 +101,13 @@ const UserProfilePage = () => {
   };
 
   const handleDeleteAccount = async () => {
+    const permision="Yes";
     setDeleteLoading(true);
     try {
-      await deleteUserAccount();
+      const res=await deleteUserAccount(permision);
+      console.log("account deleted!!",res)
       logout();
+      navigate('/register');
     } catch (err) {
       const detail = err.response?.data?.detail || err.message || 'Failed to delete account.';
       setErrorMsg(typeof detail === 'object' ? JSON.stringify(detail) : detail);

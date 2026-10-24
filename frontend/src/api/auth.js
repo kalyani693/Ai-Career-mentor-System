@@ -65,8 +65,11 @@ export const registerAdmin = async (adminData) => {
 /**
  * Soft delete user account
  */
-export const deleteUserAccount = async () => {
-  const response = await client.delete('/delete_UserAccount');
+export const deleteUserAccount = async (permision) => {
+  let input={
+     Confirm_once_again: permision,
+  };
+  const response = await client.delete('/delete_account',{data:input});
   return response.data;
 };
 
@@ -84,8 +87,8 @@ export const renewUserAccount = async (username, password) => {
 /**
  * Soft delete admin account
  */
-export const deleteAdminAccount = async () => {
-  const response = await client.delete('/admin-pannel/delete_adminAccount');
+export const deleteAdminAccount = async (permision) => {
+  const response = await client.delete('/admin-pannel/delete_admin_account',permision);
   return response.data;
 };
 

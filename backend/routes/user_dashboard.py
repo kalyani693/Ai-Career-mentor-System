@@ -64,7 +64,7 @@ async def logout(db:dependancy,permision:confirmation,user=Depends(check_user)):
     else:
         return {"response":"You are logged in 😊 you can explore the application."}
 
-@router.delete("/delete_account",response_model=dict[str, str],status_code=status.HTTP_301_MOVED_PERMANENTLY)#redirected to registration page after  acc deletion
+@router.delete("/delete_account",response_model=dict[str, str],status_code=status.HTTP_200_OK)#redirected to registration page after  acc deletion
 async def delete_account(db:dependancy,permision:confirmation,user=Depends(check_user)):
     if permision.Confirm_once_again=="Yes":
            return await auth.deleteacc(user,db)
