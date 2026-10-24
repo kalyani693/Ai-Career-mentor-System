@@ -47,11 +47,13 @@ export const getPracticeQuestions = async (difficultyLevel) => {
   return response.data; // { response: list_of_QA_objects_or_json }
 };
 
-/**
+/*
  * AI Mock Interview session API call (Frontend endpoint connection)
- * @param {Object} payload - Session ID or user message
+ * 
  */
 export const postMockInterview = async (payload = {}) => {
-  const response = await client.post('/mock_interview', payload);
+  const response = await client.post('/mock_interview');
   return response.data;
 };
+
+

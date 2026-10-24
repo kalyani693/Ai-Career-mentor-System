@@ -14,12 +14,12 @@ export const getUserProfile = async () => {
  * @param {string|number} changedValue - New value
  */
 export const editProfile = async (whatToEdit, changedValue) => {
-  const response = await client.patch('/EditProfile', null, {
-    params: {
+   
+  let input= {
       what_to_edit: whatToEdit,
       changed_value: changedValue,
-    },
-  });
+    };
+  const response = await client.patch('/EditProfile',input);
   return response.data;
 };
 
@@ -31,7 +31,7 @@ export const editResume = async (newResumeFile) => {
   const formData = new FormData();
   formData.append('newResume', newResumeFile);
 
-  const response = await client.put('/EditResume', formData, {
+  const response = await client.put('/UploadAnother_Resume', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
